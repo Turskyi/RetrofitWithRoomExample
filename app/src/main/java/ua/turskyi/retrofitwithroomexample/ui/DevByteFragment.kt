@@ -10,14 +10,14 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ua.turskyi.retrofitwithroomexample.domain.Video
-import ua.turskyi.retrofitwithroomexample.viewmodels.DevByteViewModel
 import ua.turskyi.retrofitwithroomexample.R
 import ua.turskyi.retrofitwithroomexample.databinding.DevbyteItemBinding
 import ua.turskyi.retrofitwithroomexample.databinding.FragmentDevByteBinding
+import ua.turskyi.retrofitwithroomexample.domain.Video
+import ua.turskyi.retrofitwithroomexample.viewmodels.DevByteViewModel
 
 /**
  * Show a list of DevBytes on screen.
@@ -33,7 +33,7 @@ class DevByteFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProviders.of(this, DevByteViewModel.Factory(activity.application))
+        ViewModelProvider(this, DevByteViewModel.Factory(activity.application))
                 .get(DevByteViewModel::class.java)
     }
 
@@ -80,22 +80,22 @@ class DevByteFragment : Fragment() {
                 R.layout.fragment_dev_byte,
                 container,
                 false)
-        // Set the lifecycleOwner so DataBinding can observe LiveData
+        /* Set the lifecycleOwner so DataBinding can observe LiveData */
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.viewModel = viewModel
 
         viewModelAdapter = DevByteAdapter(VideoClick {
-            // When a video is clicked this block or lambda will be called by DevByteAdapter
+            /* When a video is clicked this block or lambda will be called by DevByteAdapter
 
-            // context is not around, we can safely discard this click since the Fragment is no
-            // longer on the screen
+             context is not around, we can safely discard this click since the Fragment is no
+             longer on the screen */
             val packageManager = context?.packageManager ?: return@VideoClick
 
-            // Try to generate a direct intent to the YouTube app
+            /* Try to generate a direct intent to the YouTube app */
             var intent = Intent(Intent.ACTION_VIEW, it.launchUri)
             if(intent.resolveActivity(packageManager) == null) {
-                // YouTube app isn't found, use the web url
+                /* YouTube app isn't found, use the web url */
                 intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.url))
             }
             startActivity(intent)
@@ -121,7 +121,6 @@ class DevByteFragment : Fragment() {
 
 /**
  * Click listener for Videos. By giving the block a name it helps a reader understand what it does.
- *
  */
 class VideoClick(val block: (Video) -> Unit) {
     /**
@@ -143,10 +142,9 @@ class DevByteAdapter(private val callback: VideoClick) : RecyclerView.Adapter<De
     var videos: List<Video> = emptyList()
         set(value) {
             field = value
-            // For an extra challenge, update this to use the paging library.
 
-            // Notify any registered observers that the data set has changed. This will cause every
-            // element in our RecyclerView to be invalidated.
+            /* Notify any registered observers that the data set has changed. This will cause every
+             element in our RecyclerView to be invalidated. */
             notifyDataSetChanged()
         }
 
