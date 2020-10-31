@@ -1,6 +1,6 @@
 package ua.turskyi.retrofitwithroomexample.network
 
-import ua.turskyi.retrofitwithroomexample.database.DatabaseVideo
+import ua.turskyi.retrofitwithroomexample.database.VideoEntity
 import com.squareup.moshi.JsonClass
 
 /**
@@ -32,9 +32,9 @@ data class NetworkVideo(
         val thumbnail: String,
         val closedCaptions: String?)
 
-fun NetworkVideoContainer.asDatabaseModel(): Array<DatabaseVideo> {
+fun NetworkVideoContainer.asDatabaseModel(): Array<VideoEntity> {
     return videos.map {
-        DatabaseVideo(
+        VideoEntity(
                 title = it.title,
                 description = it.description,
                 url = it.url,

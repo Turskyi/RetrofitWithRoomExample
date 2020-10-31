@@ -5,14 +5,14 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "ua.turskyi.retrofitwithroomexample"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -38,7 +38,7 @@ dependencies {
 
     // Support libraries
     implementation "androidx.appcompat:appcompat:$version_appcompat"
-    implementation "androidx.fragment:fragment:$version_fragment"
+    implementation "androidx.fragment:fragment-ktx:$version_fragment"
     implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
 
     // Android KTX
@@ -79,5 +79,9 @@ dependencies {
 
     /* WorkManager */
     implementation "android.arch.work:work-runtime-ktx:$version_work"
+
+    /* avoids IllegalStateException: Expected Android API level 21+ but was 30 */
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 }
 

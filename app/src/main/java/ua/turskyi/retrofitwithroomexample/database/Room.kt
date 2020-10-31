@@ -1,22 +1,19 @@
 package ua.turskyi.retrofitwithroomexample.database
 
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface VideoDao {
-    @Query("select * from databasevideo")
-    fun getVideos(): LiveData<List<DatabaseVideo>>
+    @Query("select * from videoentity")
+    fun getVideos(): LiveData<List<VideoEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg videos: DatabaseVideo)
+    fun insertAll(vararg videoEntities: VideoEntity)
 }
 
-@Database(entities = [DatabaseVideo::class], version = 1)
+@Database(entities = [VideoEntity::class], version = 1)
 abstract class VideosDatabase : RoomDatabase() {
     abstract val videoDao: VideoDao
 }
@@ -24,11 +21,23 @@ abstract class VideosDatabase : RoomDatabase() {
 private lateinit var INSTANCE: VideosDatabase
 
 fun getDatabase(context: Context): VideosDatabase {
+
+    /* in case of migration */
+//    val migrationFrom1To2: Migration = object : Migration(1, 2) {
+//        override fun migrate(database: SupportSQLiteDatabase) {
+//            database.execSQL("ALTER TABLE videoentity ADD COLUMN birthday INTEGER DEFAULT 0 NOT NULL")
+//        }
+//    }
     synchronized(VideosDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    VideosDatabase::class.java,
-                    "videos").build()
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
+                VideosDatabase::class.java,
+                "videos"
+            )
+                /* in case of migration */
+//                .addMigrations(migrationFrom1To2)
+                .build()
         }
     }
     return INSTANCE
