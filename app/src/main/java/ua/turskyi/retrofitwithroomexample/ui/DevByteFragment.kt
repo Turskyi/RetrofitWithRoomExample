@@ -48,8 +48,8 @@ class DevByteFragment : Fragment() {
      * initialization once these pieces are in place, such as retrieving
      * views or restoring state.
      */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.playlist.observe(viewLifecycleOwner, { videos ->
             videos?.apply {
                 viewModelAdapter?.videos = videos
@@ -74,7 +74,7 @@ class DevByteFragment : Fragment() {
      * @return Return the View for the fragment's UI.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         val binding: FragmentDevByteBinding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_dev_byte,
